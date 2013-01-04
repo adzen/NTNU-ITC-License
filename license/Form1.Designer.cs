@@ -40,6 +40,7 @@
             this.startButton.TabIndex = 0;
             this.startButton.Text = "啟用 Office 2010";
             this.startButton.UseVisualStyleBackColor = true;
+            this.startButton.Click += new System.EventHandler(this.startButton_Click);
             // 
             // outputTextBox
             // 
