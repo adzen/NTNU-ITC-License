@@ -54,9 +54,11 @@ namespace license
             {
                 return;
             }
-            
 
-
+            if (runScript(@"/act", workingDir, @"<Product activation successful>", @"Office 2010 啟用失敗！"))
+            {
+                MessageBox.Show(@"Office 2010 啟用成功！", @"恭喜！", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
         private bool hasNTNUIP()
