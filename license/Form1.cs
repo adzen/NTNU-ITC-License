@@ -43,6 +43,13 @@ namespace license
                                 @"Office Software Protection Platform 服務重新啟動失敗！")) return;
             }
 
+            if ( runScript(@"/dstatus", workingDir, @"LICENSE STATUS:  ---LICENSED---", null) )
+            {
+                if (MessageBox.Show(@"您早已啟用成功...還需要重新啟用嗎？", @"問題",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2)
+                    == System.Windows.Forms.DialogResult.No) return;
+            }
+
 
 
 
@@ -116,7 +123,7 @@ namespace license
 
                 if (!outputTextBox.Text.Contains(successText))
                 {
-                    MessageBox.Show(errMsg, @"錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    if(errMsg != null) MessageBox.Show(errMsg, @"錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
                 }
             }
