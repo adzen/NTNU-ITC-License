@@ -9,6 +9,8 @@ using System.Windows.Forms;
 
 using System.Net;
 using System.IO;
+using System.ServiceProcess;
+using System.Diagnostics;
 
 namespace license
 {
@@ -32,6 +34,13 @@ namespace license
             {
                 MessageBox.Show(@"您似乎還沒安裝 Office 2010！", @"錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
+            }
+
+            // Windows XP
+            if (Environment.OSVersion.ToString().Contains(@"Windows NT 5") && !osppsvcIsRunning())
+            {
+                if (!runScript(@"/osppsvcrestart", workingDir, @"Successfully restarted",
+                                @"Office Software Protection Platform 服務重新啟動失敗！")) return;
             }
 
 
@@ -70,6 +79,52 @@ namespace license
                 }
             }
             return null;
+        }
+
+        private bool osppsvcIsRunning()
+        {
+            try
+            {
+                ServiceController[] services = ServiceController.GetServices();
+
+                foreach (ServiceController service in services)
+                {
+                    if (service.ServiceName == "osppsvc" && service.Status == ServiceControllerStatus.Running)
+                        return true;
+                }
+            }
+            catch (Exception gg)
+            {
+                MessageBox.Show(gg.Message);                
+            }
+            return false;
+        }
+
+        private bool runScript(string arguments, string workingDir, string successText, string errMsg) 
+        {
+            try
+            {
+                ProcessStartInfo psi = new ProcessStartInfo(@"cscript", @"ospp.vbs " + arguments);
+                psi.RedirectStandardOutput = true;
+                psi.UseShellExecute = false;
+                psi.WorkingDirectory = workingDir;
+
+                Process pc = new Process();
+                pc.StartInfo = psi;
+                pc.Start();
+                outputTextBox.Text = pc.StandardOutput.ReadToEnd();
+
+                if (!outputTextBox.Text.Contains(successText))
+                {
+                    MessageBox.Show(errMsg, @"錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+            }
+            catch (Exception gg)
+            {
+                MessageBox.Show(gg.Message);
+            }
+            return true;
         }
     }
 }
