@@ -11,6 +11,7 @@ using System.Net;
 using System.IO;
 using System.ServiceProcess;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace license
 {
@@ -19,6 +20,7 @@ namespace license
         public Form1()
         {
             InitializeComponent();
+            versionLabel.Text = "ver. " + Assembly.GetEntryAssembly().GetName().Version.ToString();
         }
 
         private void startButton_Click(object sender, EventArgs e)
