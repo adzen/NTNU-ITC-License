@@ -50,7 +50,11 @@ namespace license
                     == System.Windows.Forms.DialogResult.No) return;
             }
 
-
+            if (!runScript(@"/sethst:w7-kms.itc.ntnu.edu.tw", workingDir, @"Successfully applied setting.", @"KMS 伺服器設定失敗！"))
+            {
+                return;
+            }
+            
 
 
         }
